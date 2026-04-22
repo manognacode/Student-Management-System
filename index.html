@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student System</title>
+</head>
+<body>
+
+<h2>Add Student</h2>
+<input id="name" placeholder="Name">
+<input id="age" placeholder="Age">
+<input id="course" placeholder="Course">
+<button onclick="addStudent()">Add</button>
+
+<h2>Student List</h2>
+<ul id="list"></ul>
+
+<script>
+const API = "http://127.0.0.1:5000";
+
+// ADD
+function addStudent() {
+  fetch(API + "/add", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      name: document.getElementById("name").value,
+      age: document.getElementById("age").value,
+      course: document.getElementById("course").value
+    })
+  })
+  .then(res => res.json())
+  .then(() => loadStudents());
+}
+
+// LOAD
+function loadStudents() {
+  fetch(API + "/students")
+    .then(res => res.json())
+    .then(data => {
+      const list = document.getElementById("list");
+      list.innerHTML = "";
+      data.forEach(s => {
+        list.innerHTML += `
+          <li>
+            ${s.name} (${s.course})
+            <button onclick="deleteStudent(${s.id})">Delete</button>
+          </li>`;
+      });
+    });
+}
+
+// DELETE
+function deleteStudent(id) {
+  fetch(API + "/delete/" + id, {method: "DELETE"})
+    .then(() => loadStudents());
+}
+
+// Load on start
+loadStudents();
+</script>
+
+</body>
+</html>
