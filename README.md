@@ -78,4 +78,3 @@ This is a simple full-stack web application that allows users to manage student 
 ##  Author
 Mooli Sai Manogna
 
-[Your Name]
